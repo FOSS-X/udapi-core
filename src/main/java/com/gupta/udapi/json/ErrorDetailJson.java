@@ -43,4 +43,14 @@ public class ErrorDetailJson {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ErrorDetailJson{");
+        sb.append("errorSubCode='").append(errorSubCode).append('\'');
+        sb.append(", errorDescription='").append(errorDescription).append('\'');
+        sb.append(", message='").append(message).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

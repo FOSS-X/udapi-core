@@ -24,7 +24,6 @@ import java.util.Map;
 @Service
 public class UdapiUserServiceImpl implements UdapiUserService {
 
-
     @Autowired
     private UdapiUserRepository udapiUserRepository;
 
@@ -33,7 +32,6 @@ public class UdapiUserServiceImpl implements UdapiUserService {
 
     @Autowired
     private JwtUtility jwtUtility;
-
 
     @Override
     public UdapiUserDto getUdapiUserByUserName(String userName) {
@@ -56,7 +54,7 @@ public class UdapiUserServiceImpl implements UdapiUserService {
         // Create a new JWT token and send it to the user.
         JwtTokenJson jwtTokenJson = new JwtTokenJson();
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userName", userDto.getUserName());
+        claims.put("name", userDto.getUserName());
         claims.put("type", userDto.getType());
         String token = jwtUtility.getNewTokenFromClaims(claims);
         jwtTokenJson.setToken(token);

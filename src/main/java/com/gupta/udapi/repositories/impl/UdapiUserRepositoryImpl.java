@@ -35,58 +35,29 @@ public class UdapiUserRepositoryImpl implements UdapiUserRepository {
 
     @Override
     public Boolean checkIfUdapiUserExists(String userName) {
-        return null;
+
+        UdapiUserEntity udapiUserEntityName = null;
+
+        try {
+            udapiUserEntityName = userJpa.getUserName(userName);
+
+        }catch (Exception e) {
+            throw new DatabaseException("A database exception has occoured fetching user details");
+        }
+
+        return !(udapiUserEntityName == null);
     }
 
     @Override
     public UdapiUserEntity addNewUser(UdapiUserEntity userEntity) {
-        return null;
-    }
 
-//    @Override
-//    public UdapiUserEntity getBrandUserName(String userName) {
-//
-//        UdapiUserEntity brandUserEntity = null;
-//
-//        try {
-//            brandUserEntity = userJpa.getBrandUserName(userName);
-//        }catch (Exception e) {
-//            throw new DatabaseException("A database exception has occoured fetching user details");
-//        }
-//
-//        if (brandUserEntity == null) {
-//            throw new UserNotFoundException("The username or password is incorrect.");
-//        }
-//        return brandUserEntity;
-//    }
-//
-//    @Override
-//    public Boolean checkIfBrandUserExists(String brandName, Integer brandId) {
-//
-//        BrandUserEntity brandUserEntityName = null;
-//        BrandUserEntity brandUserEntityId = null;
-//        try {
-//            brandUserEntityName = userJpa.getBrandUserName(brandName);
-//            brandUserEntityId = userJpa.getBrandId(brandId);
-//
-//        }catch (Exception e) {
-//            throw new DatabaseException("A database exception has occoured fetching user details");
-//        }
-//
-//        return !(brandUserEntityName == null && brandUserEntityId == null);
-//    }
-//
-//    @Override
-//    public BrandUserEntity addNewBrandUser(BrandUserEntity brandUserEntity) {
-//
-//        BrandUserEntity responseEntity;
-//
-//        try {
-//            responseEntity = userJpa.save(brandUserEntity);
-//        }catch (Exception e) {
-//            throw new DatabaseException("A database error occoured creating the new brand.");
-//        }
-//
-//        return responseEntity;
-//    }
+        UdapiUserEntity responseEntity;
+        try {
+            responseEntity = userJpa.save(userEntity);
+        }catch (Exception e) {
+            throw new DatabaseException("A database error occoured creating the new brand.");
+        }
+
+        return responseEntity;
+    }
 }

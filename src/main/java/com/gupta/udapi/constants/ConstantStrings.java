@@ -7,9 +7,9 @@ public class ConstantStrings {
 
     public static final String COMMENT_STORAGE_ERROR_MSG = "Could not store comment in database.";
 
-    //TODO: Change this
     public static final String[] JWT_FILTER_EXCLUDE_PATHS = {
-            "/v1/auth/signUp"
+            "/v1/auth/signup",
+            "/v1/auth/login"
             };
 
     public static final String[] LOG_FILTER_EXCLUDE_PATHS = {};
