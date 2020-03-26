@@ -12,19 +12,26 @@ public class ConstantStrings {
             "/v1/auth/login"
             };
 
-    public static final String[] LOG_FILTER_EXCLUDE_PATHS = {};
-
     public static final String[] JWT_FILTER_INCLUDE_PATHS = {
             "/**"
     };
+
+    public static final String[] LOG_FILTER_EXCLUDE_PATHS = {};
 
     public static final String[] LOG_FILTER_INCLUDE_PATHS = {
             "/**"
     };
 
+    public static final String[] DB_FILTER_EXCLUDE_PATHS = {};
+
+    public static final String[] DB_FILTER_INCLUDE_PATHS = {
+            "/v1/metadata/db/**"
+    };
+
     public static final String NO_JWT_IN_HEADER_ERROR_MSG = "No JWT token found in header.";
 
     public static final String DB_PERSISTENCE_ERROR_MSG = "Error saving to database.";
+    public static final String NO_DBTYPE_IN_HEADER_ERROR_MSG = "No Database-Type header found in HTTP headers.";
 
     /**
      * Need to use String.format() along with this messgae.

@@ -67,7 +67,7 @@ public class UdapiUserServiceImpl implements UdapiUserService {
         // Check if user already exists.
         if (!udapiUserRepository.checkIfUdapiUserExists(signUpDetailsJson.getUserName())) {// Creating a hashed and salted password with the password supplied during sign up
             signUpDetailsJson.setPassword(BCrypt.hashpw(signUpDetailsJson.getPassword(), BCrypt.gensalt()));
-            UdapiUserEntity brandUserEntity = udapiUserRepository.addNewUser(userMapper.getEntityFromSignUp(signUpDetailsJson));
+            UdapiUserEntity brandUserEntity = udapiUserRepository.addNewUser(userMapper.getEntityFromDto(signUpDetailsJson));
             return userMapper.getDtoFromEntity(brandUserEntity);
         } else {
             throw new UserAlreadyExistsException("The brand with that ID and name combination already exists.");

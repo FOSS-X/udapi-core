@@ -1,6 +1,6 @@
 package com.gupta.udapi.exception;
 
-import com.gupta.udapi.Utils;
+import com.gupta.udapi.utility.Utils;
 import com.gupta.udapi.json.ErrorDetailJson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,5 +24,5 @@ public class GlobalExceptionAdvice {
         return  new ResponseEntity<ErrorDetailJson>(new ErrorDetailJson("SV_100-01",e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
+    //TODO: Add all other exceptions
 }

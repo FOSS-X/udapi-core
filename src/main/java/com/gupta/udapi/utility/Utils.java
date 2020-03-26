@@ -1,4 +1,6 @@
-package com.gupta.udapi;
+package com.gupta.udapi.utility;
+
+import com.gupta.udapi.services.UdapiDatabaseService;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -21,4 +23,14 @@ public class Utils {
         return writer.toString();
     }
 
+    public static  Class<UdapiDatabaseService> udapiDatabaseServiceResolver(Byte dbType) throws ClassNotFoundException {
+
+        switch (dbType) {
+            case 0: {
+                return (Class<UdapiDatabaseService>) Class.forName("com.gupta.udapi.services.impl.MysqlDatabaseServiceImpl");
+            }
+            case 1:
+        }
+        return null;
+    }
 }

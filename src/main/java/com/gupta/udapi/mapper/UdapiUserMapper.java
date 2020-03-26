@@ -20,7 +20,7 @@ public class UdapiUserMapper {
                 .build();
     }
 
-    public UdapiUserEntity getEntityFromSignUp(SignUpDetailsJson signUpDetailsJson) {
+    public UdapiUserEntity getEntityFromDto(SignUpDetailsJson signUpDetailsJson) {
 
         return new UdapiUserEntity.Builder()
                 .setName(signUpDetailsJson.getUserName())
