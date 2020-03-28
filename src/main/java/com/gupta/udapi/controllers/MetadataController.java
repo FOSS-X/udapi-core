@@ -24,6 +24,9 @@ public class MetadataController {
     @Autowired
     UdapiDatabaseMetadataService databaseMetadataService;
 
+    @Autowired
+    Utils utils;
+
     @RequestMapping(value = "/env",method = RequestMethod.GET)
     public ResponseEntity<String> getEnvMetaData() {
         return new ResponseEntity<>("{meta: 'data'}", HttpStatus.OK);
@@ -59,11 +62,11 @@ public class MetadataController {
         if (dbTypeByte == null) {
             throw new DbTypeNotFoundException("The given dbType " + dbType + " was not found.\n" + dbConfigDto);
         }
-        dbConfigDto.setType(Byte.toUnsignedInt(dbTypeByte));
+        dbConfigDto.setType(dbTypeByte);
 
         UdapiDatabaseService databaseService = null;
         try {
-            databaseService = Utils.udapiDatabaseServiceResolver(dbTypeByte).newInstance();
+            databaseService = utils.udapiDatabaseServiceResolver(dbTypeByte);
             if (databaseService == null) {
                 throw new Exception("Did not find database driver");
             }
@@ -78,32 +81,7 @@ public class MetadataController {
         //-------------
 
 //        // Testing connection.
-//        Connection conn = null;
-//        try {
-//            conn = DriverManager.getConnection(
-//                    "jdbc:mysql://localhost:3306/udapi",
-//                    "root",
-//                    "password");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        try (Statement stmt = conn.createStatement();
-//             ResultSet rs = ((Statement) stmt).executeQuery("SELECT * FROM user")
-//        ) {
-//            while (rs.next()) {
-//                int numColumns = rs.getMetaData().getColumnCount();
-//                for (int i = 1; i <= numColumns; i++) {
-//                    // Column numbers start at 1.
-//                    // Also there are many methods on the result set to return
-//                    //  the column as a particular type. Refer to the Sun documentation
-//                    //  for the list of valid conversions.
-//                    System.out.println( "COLUMN " + i + " = " + rs.getObject(i));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
 
         return new ResponseEntity<DbConfigDto>(dbConfigDto, HttpStatus.OK);
     }

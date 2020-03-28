@@ -4,6 +4,7 @@ import com.gupta.udapi.dtos.DbConfigDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author amitkumargupta
@@ -14,5 +15,7 @@ public interface UdapiDatabaseService {
     void testConnection (DbConfigDto dbConfigDto) throws SQLException;
     void addEntitySet();
     void addEntity();
-    void getEntitySet();
+    String getEntitySet(String esName);
+
+    String getAllEntitySets();
 }

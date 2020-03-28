@@ -18,6 +18,10 @@ dependencies {
 			'io.jsonwebtoken:jjwt-jackson:0.11.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// https://mvnrepository.com/artifact/org.json/json
+	compile group: 'org.json', name: 'json', version: '20190722'
+
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 	compile group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

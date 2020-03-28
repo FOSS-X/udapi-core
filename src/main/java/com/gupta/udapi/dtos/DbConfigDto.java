@@ -10,9 +10,9 @@ public class DbConfigDto {
     private String password;
     private Integer port;
     private String ip;
-    private Integer type;
+    private Byte type;
 
-    public DbConfigDto(String dbName, String userName, String password, Integer port, String ip, Integer type) {
+    public DbConfigDto(String dbName, String userName, String password, Integer port, String ip, Byte type) {
         this.dbName = dbName;
         this.userName = userName;
         this.password = password;
@@ -28,9 +28,9 @@ public class DbConfigDto {
         private String password;
         private Integer port;
         private String ip;
-        private Integer type;
+        private Byte type;
 
-        public Builder setType(Integer type) {
+        public Builder setType(Byte type) {
             this.type = type;
             return this;
         }
@@ -85,7 +85,7 @@ public class DbConfigDto {
         return sb.toString();
     }
 
-    public void setType(Integer type) {
+    public void setType(Byte type) {
         this.type = type;
     }
 
@@ -109,7 +109,7 @@ public class DbConfigDto {
         return ip;
     }
 
-    public Integer getType() {
+    public Byte getType() {
         return type;
     }
 }

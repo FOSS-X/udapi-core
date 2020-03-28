@@ -17,11 +17,14 @@ public class UdapiDatabaseMetadataEntity {
     @Column(name = "name")
     private String dbName;
 
+    @Column(name = "username")
+    private String userName;
+
     @Column(name = "password")
     private String password;
 
     @Column(name = "type")
-    private Integer type;
+    private Byte type;
 
     @Column(name = "port")
     private Integer port;
@@ -29,8 +32,9 @@ public class UdapiDatabaseMetadataEntity {
     @Column(name = "ip")
     private String ip;
 
-    public UdapiDatabaseMetadataEntity(String dbName, String password, Integer type, Integer port, String ip) {
+    public UdapiDatabaseMetadataEntity(String dbName,String userName, String password, Byte type, Integer port, String ip) {
         this.dbName = dbName;
+        this.userName = userName;
         this.password = password;
         this.type = type;
         this.port = port;
@@ -42,19 +46,26 @@ public class UdapiDatabaseMetadataEntity {
     public static class Builder {
 
         private String dbName;
+        private String userName;
         private String password;
         private Integer port;
         private String ip;
-        private Integer type;
+        private Byte type;
 
         public UdapiDatabaseMetadataEntity build() {
             return new UdapiDatabaseMetadataEntity(
                     dbName,
+                    userName,
                     password,
                     type,
                     port,
                     ip
             );
+        }
+
+        public Builder setUserName(String userName) {
+            this.userName = userName;
+            return this;
         }
 
         public Builder setDbName(String dbName) {
@@ -77,12 +88,16 @@ public class UdapiDatabaseMetadataEntity {
             return this;
         }
 
-        public Builder setType(Integer type) {
+        public Builder setType(Byte type) {
             this.type = type;
             return this;
         }
     }
 
+
+    public String getUserName() {
+        return userName;
+    }
 
     public Integer getId() {
         return id;
@@ -96,7 +111,7 @@ public class UdapiDatabaseMetadataEntity {
         return password;
     }
 
-    public Integer getType() {
+    public Byte getType() {
         return type;
     }
 
@@ -113,6 +128,7 @@ public class UdapiDatabaseMetadataEntity {
         final StringBuilder sb = new StringBuilder("UdapiDatabaseMetadataEntity{");
         sb.append("id=").append(id);
         sb.append(", dbName='").append(dbName).append('\'');
+        sb.append(", userName='").append(userName).append('\'');
         sb.append(", password='").append(password).append('\'');
         sb.append(", type=").append(type);
         sb.append(", port=").append(port);

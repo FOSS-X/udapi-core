@@ -17,6 +17,7 @@ public class UdapiDatabaseMetadataMapper {
 
         return new DbConfigDto.Builder()
                 .setDbName(metadataEntity.getDbName())
+                .setUserName(metadataEntity.getUserName())
                 .setIp(metadataEntity.getIp())
                 .setPassword(metadataEntity.getPassword())
                 .setPort(metadataEntity.getPort())
@@ -28,6 +29,7 @@ public class UdapiDatabaseMetadataMapper {
 
         return new UdapiDatabaseMetadataEntity.Builder()
                 .setDbName(configDto.getDbName())
+                .setUserName(configDto.getUserName())
                 .setIp(configDto.getIp())
                 .setPassword(configDto.getPassword())
                 .setPort(configDto.getPort())

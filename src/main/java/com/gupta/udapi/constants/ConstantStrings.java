@@ -25,7 +25,8 @@ public class ConstantStrings {
     public static final String[] DB_FILTER_EXCLUDE_PATHS = {};
 
     public static final String[] DB_FILTER_INCLUDE_PATHS = {
-            "/v1/metadata/db/**"
+            "/v1/metadata/db/**",
+            "/v1/entitySet/**"
     };
 
     public static final String NO_JWT_IN_HEADER_ERROR_MSG = "No JWT token found in header.";
