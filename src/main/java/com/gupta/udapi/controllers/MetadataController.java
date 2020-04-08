@@ -5,8 +5,11 @@ import com.gupta.udapi.enums.DbTypeEnum;
 import com.gupta.udapi.exception.DbTypeNotFoundException;
 import com.gupta.udapi.services.UdapiDatabaseMetadataService;
 import com.gupta.udapi.services.UdapiDatabaseService;
+import com.gupta.udapi.services.factories.ApplicationContextFactory;
+import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.gupta.udapi.utility.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +69,8 @@ public class MetadataController {
 
         UdapiDatabaseService databaseService = null;
         try {
-            databaseService = utils.udapiDatabaseServiceResolver(dbTypeByte);
+            databaseService = DatabaseServiceFactory.getDatabaseService(ApplicationContextFactory.getApplicationContext(), dbTypeByte);
+
             if (databaseService == null) {
                 throw new Exception("Did not find database driver");
             }

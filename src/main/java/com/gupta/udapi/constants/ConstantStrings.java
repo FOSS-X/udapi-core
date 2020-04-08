@@ -9,7 +9,8 @@ public class ConstantStrings {
 
     public static final String[] JWT_FILTER_EXCLUDE_PATHS = {
             "/v1/auth/signup",
-            "/v1/auth/login"
+            "/v1/auth/login",
+            "/test"
             };
 
     public static final String[] JWT_FILTER_INCLUDE_PATHS = {

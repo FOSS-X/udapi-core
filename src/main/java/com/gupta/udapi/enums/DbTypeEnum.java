@@ -1,11 +1,13 @@
 package com.gupta.udapi.enums;
 
+import com.gupta.udapi.constants.UdapiDatabaseCodes;
+
 public enum DbTypeEnum {
     
-    MYSQL((byte) 0, "mysql"),
-    MONGODB((byte) 1, "mongodb"),
-    COUCHDB((byte) 2, "couchdb"),
-    RIAKDB((byte) 3, "riakdb");
+    MYSQL((byte) UdapiDatabaseCodes.MYSQL, "mysql"),
+    MONGODB((byte) UdapiDatabaseCodes.MYSQL, "mongodb"),
+    COUCHDB((byte) UdapiDatabaseCodes.MYSQL, "couchdb"),
+    RIAKDB((byte) UdapiDatabaseCodes.MYSQL, "riakdb");
     
     private byte id;
     private String value;

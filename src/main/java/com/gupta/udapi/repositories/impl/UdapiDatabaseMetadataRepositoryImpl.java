@@ -2,6 +2,7 @@ package com.gupta.udapi.repositories.impl;
 
 import com.gupta.udapi.entities.UdapiDatabaseMetadataEntity;
 import com.gupta.udapi.enums.DbTypeEnum;
+import com.gupta.udapi.exception.DatabaseConfigAlreadyExistsException;
 import com.gupta.udapi.exception.DatabaseException;
 import com.gupta.udapi.repositories.UdapiDatabaseMetadataRepository;
 import com.gupta.udapi.repositories.jpa.UdapiDatabaseMetadataJpa;
@@ -20,6 +21,21 @@ public class UdapiDatabaseMetadataRepositoryImpl implements UdapiDatabaseMetadat
     public UdapiDatabaseMetadataEntity addNewDatabaseConfig(UdapiDatabaseMetadataEntity databaseMetadataEntity) {
 
         //TODO: Logic for duplicate databases
+        //Checking if a database config with the same name for that database already exists
+        try {
+            Boolean exists = udapiDatabaseMetadataJpa.checkIfCommunityExistsByName(databaseMetadataEntity.getDbName(),
+                    databaseMetadataEntity.getType());
+
+            if (exists)
+                throw new DatabaseConfigAlreadyExistsException("The database config already exists: " + databaseMetadataEntity.toString());
+
+        }catch (DatabaseConfigAlreadyExistsException e) {
+            throw new DatabaseConfigAlreadyExistsException("The database config already exists: " + databaseMetadataEntity.toString());
+        }
+        catch (Exception e) {
+            throw new DatabaseException("There was a database error storing the db config: \n"
+                    + databaseMetadataEntity);
+        }
 
         try {
             databaseMetadataEntity = udapiDatabaseMetadataJpa.save(databaseMetadataEntity);

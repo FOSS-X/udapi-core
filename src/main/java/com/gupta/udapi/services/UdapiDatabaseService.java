@@ -16,6 +16,5 @@ public interface UdapiDatabaseService {
     void addEntitySet();
     void addEntity();
     String getEntitySet(String esName);
-
     String getAllEntitySets();
 }

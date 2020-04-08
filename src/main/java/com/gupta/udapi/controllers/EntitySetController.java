@@ -1,6 +1,9 @@
 package com.gupta.udapi.controllers;
 
+import com.gupta.udapi.enums.DbTypeEnum;
 import com.gupta.udapi.services.UdapiDatabaseService;
+import com.gupta.udapi.services.factories.ApplicationContextFactory;
+import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.gupta.udapi.utility.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +28,8 @@ public class EntitySetController {
             @RequestAttribute(name = "dbType") String dbType
     ) {
 
-        UdapiDatabaseService databaseService = utils.resolveServiceTypeInstanceFromDbType(dbType);
+        Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
+        UdapiDatabaseService databaseService = DatabaseServiceFactory.getDatabaseService(ApplicationContextFactory.getApplicationContext(), dbTypeByte);
         String res = databaseService.getAllEntitySets();
         return utils.buildJsonResponseEntityFromString(res);
     }
@@ -35,7 +39,8 @@ public class EntitySetController {
             final @PathVariable String entitySetName,
             @RequestAttribute(name = "dbType") String dbType
     ) {
-        UdapiDatabaseService databaseService = utils.resolveServiceTypeInstanceFromDbType(dbType);
+        Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
+        UdapiDatabaseService databaseService = DatabaseServiceFactory.getDatabaseService(ApplicationContextFactory.getApplicationContext(), dbTypeByte);
         String jsonResult = databaseService.getEntitySet(entitySetName);
         return utils.buildJsonResponseEntityFromString(jsonResult);
     }

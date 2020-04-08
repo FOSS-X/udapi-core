@@ -1,5 +1,6 @@
 package com.gupta.udapi.services.impl;
 
+import com.gupta.udapi.constants.UdapiDatabaseCodes;
 import com.gupta.udapi.dtos.DbConfigDto;
 import com.gupta.udapi.entities.UdapiDatabaseMetadataEntity;
 import com.gupta.udapi.enums.DbTypeEnum;
@@ -9,10 +10,12 @@ import com.gupta.udapi.repositories.UdapiDatabaseMetadataRepository;
 import com.gupta.udapi.repositories.UdapiUserRepository;
 import com.gupta.udapi.services.UdapiDatabaseMetadataService;
 import com.gupta.udapi.services.UdapiDatabaseService;
+import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.gupta.udapi.utility.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.datatype.DatatypeConstants;
 import java.sql.*;
 import java.util.List;
 
@@ -24,6 +27,10 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
 
     @Autowired
     Utils utils;
+
+    static {
+        DatabaseServiceFactory.registerDatabaseService(UdapiDatabaseCodes.MYSQL, UdapiMysqlDatabaseServiceImpl.class);
+    }
 
     @Override
     public void testConnection(DbConfigDto dbConfigDto) throws SQLException {
