@@ -5,9 +5,9 @@ import com.gupta.udapi.constants.UdapiDatabaseCodes;
 public enum DbTypeEnum {
     
     MYSQL((byte) UdapiDatabaseCodes.MYSQL, "mysql"),
-    MONGODB((byte) UdapiDatabaseCodes.MYSQL, "mongodb"),
-    COUCHDB((byte) UdapiDatabaseCodes.MYSQL, "couchdb"),
-    RIAKDB((byte) UdapiDatabaseCodes.MYSQL, "riakdb");
+    MONGODB((byte) UdapiDatabaseCodes.MONGODB, "mongodb"),
+    COUCHDB((byte) UdapiDatabaseCodes.COUCHDB, "couchdb"),
+    RIAKDB((byte) UdapiDatabaseCodes.RIAKDB, "riakdb");
     
     private byte id;
     private String value;

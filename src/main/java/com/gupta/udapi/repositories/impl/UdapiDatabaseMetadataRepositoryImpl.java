@@ -6,8 +6,6 @@ import com.gupta.udapi.exception.DatabaseConfigAlreadyExistsException;
 import com.gupta.udapi.exception.DatabaseException;
 import com.gupta.udapi.repositories.UdapiDatabaseMetadataRepository;
 import com.gupta.udapi.repositories.jpa.UdapiDatabaseMetadataJpa;
-import com.gupta.udapi.services.UdapiDatabaseService;
-import com.gupta.udapi.utility.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,14 +18,13 @@ public class UdapiDatabaseMetadataRepositoryImpl implements UdapiDatabaseMetadat
     @Override
     public UdapiDatabaseMetadataEntity addNewDatabaseConfig(UdapiDatabaseMetadataEntity databaseMetadataEntity) {
 
-        //TODO: Logic for duplicate databases
         //Checking if a database config with the same name for that database already exists
         try {
             Boolean exists = udapiDatabaseMetadataJpa.checkIfCommunityExistsByName(databaseMetadataEntity.getDbName(),
                     databaseMetadataEntity.getType());
 
             if (exists)
-                throw new DatabaseConfigAlreadyExistsException("The database config already exists: " + databaseMetadataEntity.toString());
+                throw new DatabaseConfigAlreadyExistsException();
 
         }catch (DatabaseConfigAlreadyExistsException e) {
             throw new DatabaseConfigAlreadyExistsException("The database config already exists: " + databaseMetadataEntity.toString());
@@ -56,7 +53,7 @@ public class UdapiDatabaseMetadataRepositoryImpl implements UdapiDatabaseMetadat
         }catch (Exception e) {
             e.printStackTrace();
             throw new DatabaseException("There was a database error fetching the db config: \n"
-                    + databaseMetadataEntity);
+                    + dbType);
         }
         return databaseMetadataEntity;
     }

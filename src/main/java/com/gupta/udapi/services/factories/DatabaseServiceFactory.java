@@ -14,6 +14,7 @@ public class DatabaseServiceFactory {
     private static final Map<Byte, Class<? extends UdapiDatabaseService>> registerMap = new HashMap<>();
 
     public static void registerDatabaseService(Byte typeByte, Class<? extends UdapiDatabaseService> implClass) {
+        System.out.println("Registered: " + typeByte + " " + implClass);
         registerMap.put(typeByte, implClass);
     }
 

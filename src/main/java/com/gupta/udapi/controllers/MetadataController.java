@@ -27,9 +27,6 @@ public class MetadataController {
     @Autowired
     UdapiDatabaseMetadataService databaseMetadataService;
 
-    @Autowired
-    Utils utils;
-
     @RequestMapping(value = "/env",method = RequestMethod.GET)
     public ResponseEntity<String> getEnvMetaData() {
         return new ResponseEntity<>("{meta: 'data'}", HttpStatus.OK);
@@ -61,15 +58,16 @@ public class MetadataController {
         //TODO: validate Confifg DTO
 
         Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
-
         if (dbTypeByte == null) {
             throw new DbTypeNotFoundException("The given dbType " + dbType + " was not found.\n" + dbConfigDto);
         }
         dbConfigDto.setType(dbTypeByte);
+        System.out.println(dbConfigDto);
 
         UdapiDatabaseService databaseService = null;
         try {
             databaseService = DatabaseServiceFactory.getDatabaseService(ApplicationContextFactory.getApplicationContext(), dbTypeByte);
+            System.out.println(databaseService);
 
             if (databaseService == null) {
                 throw new Exception("Did not find database driver");

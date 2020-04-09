@@ -22,37 +22,30 @@ import java.sql.ResultSet;
 @Service
 public class Utils {
 
-    @Autowired
-    UdapiDatabaseMetadataRepository metadataRepository;
-
     /**
      * Takes an exception stack trace and returns it in a String format.
      * @param ex
      * @return
      */
-    public String getStackTraceInStringFmt(Exception ex) {
+    public static String getStackTraceInStringFmt(Exception ex) {
         Writer writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
         ex.printStackTrace(printWriter);
         return writer.toString();
     }
 
-    public ResponseEntity<String>  buildJsonResponseEntityFromString(String jsonBody) {
+    public static ResponseEntity<String>  buildJsonResponseEntityFromString(String jsonBody) {
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Content-Type", "application/json")
                 .body(jsonBody);
     }
 
-    public JSONArray convertToJSON(ResultSet resultSet) throws Exception {
+    public static JSONArray convertEntityResultSetToJSON(ResultSet resultSet) throws Exception {
         JSONArray jsonArray = new JSONArray();
         while (resultSet.next()) {
             int total_rows = resultSet.getMetaData().getColumnCount();
-            System.out.println(total_rows);
             JSONObject obj = new JSONObject();
             for (int i = 0; i < total_rows; i++) {
-                System.out.println(resultSet.getMetaData().getColumnLabel(i + 1)
-                        .toLowerCase());
-                System.out.println(resultSet.getObject(i + 1));
                 obj.put(resultSet.getMetaData().getColumnLabel(i + 1)
                         .toLowerCase(), resultSet.getObject(i + 1));
             }
@@ -61,8 +54,14 @@ public class Utils {
         return jsonArray;
     }
 
-    public UdapiDatabaseMetadataEntity getMetadataConnection(DbTypeEnum dbTypeEnum) {
-
-        return metadataRepository.getDatabaseConfig(dbTypeEnum);
+    public static JSONArray convertAllEntityResultSetToJSON(ResultSet resultSet) throws Exception {
+        JSONArray jsonArray = new JSONArray();
+        while (resultSet.next()) {
+            int total_rows = resultSet.getMetaData().getColumnCount();
+            for (int i = 0; i < total_rows; i++) {
+                jsonArray.put(resultSet.getObject(i+1));
+            }
+        }
+        return jsonArray;
     }
 }

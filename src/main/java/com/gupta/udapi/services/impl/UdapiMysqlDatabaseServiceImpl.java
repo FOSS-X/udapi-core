@@ -7,26 +7,19 @@ import com.gupta.udapi.enums.DbTypeEnum;
 import com.gupta.udapi.exception.CannotConnectToDatabaseException;
 import com.gupta.udapi.exception.DatabaseException;
 import com.gupta.udapi.repositories.UdapiDatabaseMetadataRepository;
-import com.gupta.udapi.repositories.UdapiUserRepository;
-import com.gupta.udapi.services.UdapiDatabaseMetadataService;
 import com.gupta.udapi.services.UdapiDatabaseService;
 import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.gupta.udapi.utility.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.datatype.DatatypeConstants;
 import java.sql.*;
-import java.util.List;
 
 @Service
 public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
 
     @Autowired
     UdapiDatabaseMetadataRepository metadataRepository;
-
-    @Autowired
-    Utils utils;
 
     static {
         DatabaseServiceFactory.registerDatabaseService(UdapiDatabaseCodes.MYSQL, UdapiMysqlDatabaseServiceImpl.class);
@@ -58,8 +51,9 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
     }
 
     @Override
-    public void addEntitySet() {
+    public String addEntitySet(String esName) {
 
+        return esName;
     }
 
     @Override
@@ -97,7 +91,7 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
         try (Statement stmt = conn.createStatement();
              ResultSet rs = ((Statement) stmt).executeQuery("SELECT * FROM " + esName)
         ) {
-            result = utils.convertToJSON(rs).toString();
+            result = Utils.convertEntityResultSetToJSON(rs).toString();
         } catch (Exception e) {
             e.printStackTrace();
             throw new DatabaseException("The entity set probably does not exist " + esName);
@@ -144,7 +138,7 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
         try (Statement stmt = conn.createStatement();
              ResultSet rs = ((Statement) stmt).executeQuery("SHOW TABLES")
         ) {
-            result = utils.convertToJSON(rs).toString();
+            result = Utils.convertAllEntityResultSetToJSON(rs).toString();
         } catch (Exception e) {
             e.printStackTrace();
             throw new DatabaseException("Error fetching all tables");
