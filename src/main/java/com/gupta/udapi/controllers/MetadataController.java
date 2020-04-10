@@ -1,6 +1,8 @@
 package com.gupta.udapi.controllers;
 
+import com.gupta.udapi.constants.ConstantStrings;
 import com.gupta.udapi.dtos.DbConfigDto;
+import com.gupta.udapi.entities.UdapiDatabaseMetadataEntity;
 import com.gupta.udapi.enums.DbTypeEnum;
 import com.gupta.udapi.exception.DbTypeNotFoundException;
 import com.gupta.udapi.services.UdapiDatabaseMetadataService;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author amitkumargupta
@@ -32,12 +36,6 @@ public class MetadataController {
         return new ResponseEntity<>("{meta: 'data'}", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/db/{dbName}",method = RequestMethod.GET)
-    public ResponseEntity<String> getDbMetaData(
-            final @NotNull @PathVariable String dbName) {
-        return new ResponseEntity<>(dbName, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/entitySet/{entitySetName}",method = RequestMethod.GET)
     public ResponseEntity<String> getEntitySetMetaData(
             final @NotNull @PathVariable String entitySetName) {
@@ -50,12 +48,10 @@ public class MetadataController {
      * @param dbConfigDto The json POST request body
      * @return HTTP status
      */
-    @RequestMapping(value = "/db",method = RequestMethod.POST)
+    @RequestMapping(value = "/db/{dbType}",method = RequestMethod.POST)
     public ResponseEntity<DbConfigDto> addDatabase(
-            final @RequestAttribute(name = "dbType") String dbType,
+            @PathVariable(value = "dbType") String dbType,
             @RequestBody DbConfigDto dbConfigDto) throws IllegalAccessException, InstantiationException, SQLException {
-
-        //TODO: validate Confifg DTO
 
         Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
         if (dbTypeByte == null) {
@@ -80,11 +76,24 @@ public class MetadataController {
         // If connection is successful, add to config db
         dbConfigDto = databaseMetadataService.addDbConfigToDatabase(dbConfigDto);
 
-        //-------------
-
-//        // Testing connection.
-
-
         return new ResponseEntity<DbConfigDto>(dbConfigDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/db/{value}",method = RequestMethod.GET)
+    public ResponseEntity<List<UdapiDatabaseMetadataEntity>> getAllDatabaseConfigs(
+            @PathVariable(value = "value") String inputValue) {
+
+        List<UdapiDatabaseMetadataEntity> metadataEntities;
+
+        if (! inputValue.equals(ConstantStrings.ALL_DB_CONFIG_TYPE)) {
+            metadataEntities = new ArrayList<>();
+            Byte typeByte = DbTypeEnum.getEnumByteFromString(inputValue);
+            metadataEntities.add(databaseMetadataService.getDatabaseConfig(DbTypeEnum.getEnumByValueByte(typeByte)));
+        }
+        else {
+            metadataEntities = databaseMetadataService.getAllDatabaseConfig();
+        }
+
+        return new ResponseEntity<List<UdapiDatabaseMetadataEntity>>(metadataEntities, HttpStatus.OK);
     }
 }

@@ -37,6 +37,6 @@ public class AppConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(customHeaderExtractionFilter).addPathPatterns(
                 ConstantStrings.DB_FILTER_INCLUDE_PATHS)
-                .excludePathPatterns();
+                .excludePathPatterns(ConstantStrings.DB_FILTER_EXCLUDE_PATHS);
     }
 }

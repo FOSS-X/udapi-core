@@ -25,6 +25,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
 	compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.3'
 
+	//Couch db IBM driver
+	compile group: 'com.cloudant', name: 'cloudant-client', version: '2.19.0'
+
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 	compile group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

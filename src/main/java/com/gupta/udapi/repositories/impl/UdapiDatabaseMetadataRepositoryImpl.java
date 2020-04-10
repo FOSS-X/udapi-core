@@ -9,6 +9,8 @@ import com.gupta.udapi.repositories.jpa.UdapiDatabaseMetadataJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UdapiDatabaseMetadataRepositoryImpl implements UdapiDatabaseMetadataRepository {
 
@@ -56,5 +58,17 @@ public class UdapiDatabaseMetadataRepositoryImpl implements UdapiDatabaseMetadat
                     + dbType);
         }
         return databaseMetadataEntity;
+    }
+
+    @Override
+    public List<UdapiDatabaseMetadataEntity> getAllDatabaseConfig() {
+
+        List<UdapiDatabaseMetadataEntity> metadataEntities = null;
+        try {
+            metadataEntities = udapiDatabaseMetadataJpa.getAllDatabaseMetadataFromByte();
+        }catch (Exception e) {
+            throw new DatabaseException("There was a database error fetching the db config: \n");
+        }
+        return metadataEntities;
     }
 }

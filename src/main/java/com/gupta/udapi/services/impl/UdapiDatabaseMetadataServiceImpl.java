@@ -10,6 +10,8 @@ import com.gupta.udapi.services.UdapiDatabaseMetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UdapiDatabaseMetadataServiceImpl implements UdapiDatabaseMetadataService {
 
@@ -25,7 +27,14 @@ public class UdapiDatabaseMetadataServiceImpl implements UdapiDatabaseMetadataSe
     }
 
     @Override
-    public UdapiDatabaseMetadataEntity getDatabaseConfig(DbTypeEnum mysql) {
-        return null;
+    public UdapiDatabaseMetadataEntity getDatabaseConfig(DbTypeEnum typeEnum) {
+        UdapiDatabaseMetadataEntity metadataEntity = databaseMetadataRepository.getDatabaseConfig(typeEnum);
+        return metadataEntity;
+    }
+
+    @Override
+    public List<UdapiDatabaseMetadataEntity> getAllDatabaseConfig() {
+        List<UdapiDatabaseMetadataEntity> metadataEntities = databaseMetadataRepository.getAllDatabaseConfig();
+        return metadataEntities;
     }
 }

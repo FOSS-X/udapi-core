@@ -1,5 +1,8 @@
 package com.gupta.udapi.services.impl;
 
+import com.cloudant.client.api.ClientBuilder;
+import com.cloudant.client.api.CloudantClient;
+import com.cloudant.client.api.Database;
 import com.gupta.udapi.constants.UdapiDatabaseCodes;
 import com.gupta.udapi.dtos.DbConfigDto;
 import com.gupta.udapi.entities.UdapiDatabaseMetadataEntity;
@@ -11,43 +14,36 @@ import com.gupta.udapi.services.UdapiDatabaseService;
 import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 
 @Service
-public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
+public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
 
     @Autowired
     UdapiDatabaseMetadataRepository metadataRepository;
 
     static {
-        DatabaseServiceFactory.registerDatabaseService(UdapiDatabaseCodes.MONGODB, UdapiMongoDbDatabaseServiceImpl.class);
+        DatabaseServiceFactory.registerDatabaseService(UdapiDatabaseCodes.COUCHDB, UdapiCouchDbDatabaseServiceImpl.class);
     }
 
     @Override
     public void testConnection(DbConfigDto dbConfigDto) {
-        //MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
 
-        MongoClient mongoClient = null;
+        CloudantClient client;
+
         try {
-            mongoClient = new MongoClient(new MongoClientURI(
-                    "mongodb://" +
-                            dbConfigDto.getIp() +
-                            ":" +
-                            dbConfigDto.getPort()));
-
-            // Checking if the database exists.
-            MongoDatabase database = mongoClient.getDatabase(dbConfigDto.getDbName());
-
+            client = ClientBuilder.url(new URL("http://" + dbConfigDto.getIp()))
+                 .username(dbConfigDto.getUserName())
+                 .password(dbConfigDto.getPassword())
+                 .build();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
                     dbConfigDto);
         }
@@ -115,31 +111,26 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
             throw new DatabaseException("The mysql database configuration might not exist. Create one.");
         }
 
-        MongoClient mongoClient = null;
-        DB database = null;
+        CloudantClient client;
+
         try {
-            mongoClient = new MongoClient(new MongoClientURI(
-                    "mongodb://" +
-                            databaseMetadataEntity.getIp() +
-                            ":" +
-                            databaseMetadataEntity.getPort()));
-
-            database = mongoClient.getDB(databaseMetadataEntity.getDbName());
-            if (database == null)
-                throw new Exception();
-
+            client = ClientBuilder.url(new URL("http://" + databaseMetadataEntity.getIp()))
+                    .username(databaseMetadataEntity.getUserName())
+                    .password(databaseMetadataEntity.getPassword())
+                    .build();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
                     databaseMetadataEntity);
         }
 
-        Set<String> esNames = database.getCollectionNames();
-        mongoClient.close();
+//        Set<String> esNames = database.getCollectionNames();
+//        mongoClient.close();
 
         JSONArray array = new JSONArray();
-        for (String s : esNames) {
-            array.put(s);
-        }
+//        for (String s : esNames) {
+//            array.put(s);
+//        }
 
         return array.toString();
     }

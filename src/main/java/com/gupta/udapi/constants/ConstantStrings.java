@@ -6,6 +6,7 @@ package com.gupta.udapi.constants;
 public class ConstantStrings {
 
     public static final String COMMENT_STORAGE_ERROR_MSG = "Could not store comment in database.";
+    public static final String ALL_DB_CONFIG_TYPE = "all";
 
     public static final String[] JWT_FILTER_EXCLUDE_PATHS = {
             "/v1/auth/signup",
@@ -23,10 +24,11 @@ public class ConstantStrings {
             "/**"
     };
 
-    public static final String[] DB_FILTER_EXCLUDE_PATHS = {};
+    public static final String[] DB_FILTER_EXCLUDE_PATHS = {
+            "/v1/metadata/db/all"
+    };
 
     public static final String[] DB_FILTER_INCLUDE_PATHS = {
-            "/v1/metadata/db/**",
             "/v1/entitySet/**"
     };
 
