@@ -55,9 +55,14 @@ public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
     }
 
     @Override
-    public void addEntity() {
-
+    public String addEntity(String entityName, String entityId) {
+        return null;
     }
+
+//    @Override
+//    public void addEntity() {
+//
+//    }
 
     @Override
     public String getEntitySet(String esName) {
@@ -126,7 +131,7 @@ public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
 
 //        Set<String> esNames = database.getCollectionNames();
 //        mongoClient.close();
-
+        
         JSONArray array = new JSONArray();
 //        for (String s : esNames) {
 //            array.put(s);

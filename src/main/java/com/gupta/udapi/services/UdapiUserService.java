@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 /**
  * @author Amit
  */
-@Service
 public interface UdapiUserService {
 
     UdapiUserDto getUdapiUserByUserName(String userName);

@@ -1,11 +1,13 @@
 package com.gupta.udapi.controllers;
 
+import com.gupta.udapi.enums.DbTypeEnum;
+import com.gupta.udapi.services.UdapiDatabaseService;
+import com.gupta.udapi.services.factories.ApplicationContextFactory;
+import com.gupta.udapi.services.factories.DatabaseServiceFactory;
+import com.gupta.udapi.utility.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author amitkumargupta
@@ -33,9 +35,16 @@ public class EntityController {
     @RequestMapping(value = "/{entitySetName}/{entityId}",method = RequestMethod.POST)
     public ResponseEntity<String> createEntity(
             final @PathVariable String entitySetName,
-            final @PathVariable String entityId
+            final @PathVariable String entityId,
+            @RequestAttribute(name = "dbType") String dbType
     ) {
-        return new ResponseEntity<>(entitySetName + "/"  + entityId, HttpStatus.OK);
+
+        Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
+        UdapiDatabaseService databaseService = DatabaseServiceFactory.getDatabaseService(
+                ApplicationContextFactory.getApplicationContext(), dbTypeByte);
+        String jsonResult = databaseService.addEntity(entitySetName, entityId);
+        return Utils.buildJsonResponseEntityFromString(jsonResult);
+        //return new ResponseEntity<>(entitySetName + "/"  + entityId, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{entitySetName}/{entityId}",method = RequestMethod.DELETE)

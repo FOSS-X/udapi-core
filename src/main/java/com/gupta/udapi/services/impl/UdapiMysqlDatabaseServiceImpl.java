@@ -57,9 +57,14 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
     }
 
     @Override
-    public void addEntity() {
-
+    public String addEntity(String entityName, String entityId) {
+        return null;
     }
+
+//    @Override
+//    public void addEntity() {
+//
+//    }
 
     @Override
     public String getEntitySet(String esName) {

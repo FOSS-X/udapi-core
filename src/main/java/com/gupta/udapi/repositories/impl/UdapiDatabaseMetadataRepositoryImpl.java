@@ -61,6 +61,30 @@ public class UdapiDatabaseMetadataRepositoryImpl implements UdapiDatabaseMetadat
     }
 
     @Override
+    public UdapiDatabaseMetadataEntity updateDatabaseConfig(UdapiDatabaseMetadataEntity metadataEntity) {
+
+        UdapiDatabaseMetadataEntity oldEntity = getDatabaseConfig(
+                DbTypeEnum.getEnumByValueByte(metadataEntity.getType())
+        );
+
+        metadataEntity.setId(oldEntity.getId());
+
+        try {
+            metadataEntity = udapiDatabaseMetadataJpa.save(metadataEntity);
+        }catch (Exception e) {
+            throw new DatabaseException("There was a database error storing the db config: \n"
+                    + metadataEntity);
+        }
+
+        return metadataEntity;
+    }
+
+    @Override
+    public void deleteDatabaseConfig(DbTypeEnum typeEnum) {
+        udapiDatabaseMetadataJpa.deleteDatabaseConfig(typeEnum.getId());
+    }
+
+    @Override
     public List<UdapiDatabaseMetadataEntity> getAllDatabaseConfig() {
 
         List<UdapiDatabaseMetadataEntity> metadataEntities = null;

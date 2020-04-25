@@ -17,15 +17,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionAdvice {
 
     @Autowired
-    Utils utils;
-
+    private Utils utils;
     private static Logger strategyLogger = LogManager.getLogger();
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorDetailJson> generalServerException(Exception e) {
+
         strategyLogger.fatal("Internal server error.");
         strategyLogger.fatal(utils.getStackTraceInStringFmt(e));
-        return  new ResponseEntity<ErrorDetailJson>(new ErrorDetailJson("UD_100-01",e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return  new ResponseEntity<ErrorDetailJson>(new ErrorDetailJson("UD_100-01",e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //TODO: Add all other exceptions

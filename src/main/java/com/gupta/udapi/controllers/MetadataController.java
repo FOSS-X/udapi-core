@@ -36,12 +36,6 @@ public class MetadataController {
         return new ResponseEntity<>("{meta: 'data'}", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/entitySet/{entitySetName}",method = RequestMethod.GET)
-    public ResponseEntity<String> getEntitySetMetaData(
-            final @NotNull @PathVariable String entitySetName) {
-        return new ResponseEntity<>(entitySetName, HttpStatus.OK);
-    }
-
     /**
      * Adding a new database configuration
      * @param dbType One of mysql, mongodb, riakdb, couchdb, etc
@@ -51,20 +45,19 @@ public class MetadataController {
     @RequestMapping(value = "/db/{dbType}",method = RequestMethod.POST)
     public ResponseEntity<DbConfigDto> addDatabase(
             @PathVariable(value = "dbType") String dbType,
-            @RequestBody DbConfigDto dbConfigDto) throws IllegalAccessException, InstantiationException, SQLException {
+            @RequestBody DbConfigDto dbConfigDto) throws SQLException {
 
         Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
         if (dbTypeByte == null) {
             throw new DbTypeNotFoundException("The given dbType " + dbType + " was not found.\n" + dbConfigDto);
         }
         dbConfigDto.setType(dbTypeByte);
-        System.out.println(dbConfigDto);
 
         UdapiDatabaseService databaseService = null;
         try {
-            databaseService = DatabaseServiceFactory.getDatabaseService(ApplicationContextFactory.getApplicationContext(), dbTypeByte);
+            databaseService = DatabaseServiceFactory.getDatabaseService(
+                    ApplicationContextFactory.getApplicationContext(), dbTypeByte);
             System.out.println(databaseService);
-
             if (databaseService == null) {
                 throw new Exception("Did not find database driver");
             }
@@ -75,8 +68,7 @@ public class MetadataController {
 
         // If connection is successful, add to config db
         dbConfigDto = databaseMetadataService.addDbConfigToDatabase(dbConfigDto);
-
-        return new ResponseEntity<DbConfigDto>(dbConfigDto, HttpStatus.OK);
+        return new ResponseEntity<>(dbConfigDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/db/{value}",method = RequestMethod.GET)
@@ -84,7 +76,6 @@ public class MetadataController {
             @PathVariable(value = "value") String inputValue) {
 
         List<UdapiDatabaseMetadataEntity> metadataEntities;
-
         if (! inputValue.equals(ConstantStrings.ALL_DB_CONFIG_TYPE)) {
             metadataEntities = new ArrayList<>();
             Byte typeByte = DbTypeEnum.getEnumByteFromString(inputValue);
@@ -93,7 +84,27 @@ public class MetadataController {
         else {
             metadataEntities = databaseMetadataService.getAllDatabaseConfig();
         }
+        return new ResponseEntity<>(metadataEntities, HttpStatus.OK);
+    }
 
-        return new ResponseEntity<List<UdapiDatabaseMetadataEntity>>(metadataEntities, HttpStatus.OK);
+    @RequestMapping(value = "/db/{dbType}",method = RequestMethod.PUT)
+    public ResponseEntity<DbConfigDto> updateDatabaseConfig(
+            @PathVariable(value = "dbType") String dbType,
+            @RequestBody DbConfigDto dbConfigDto) {
+
+        Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
+        if (dbTypeByte == null) {
+            throw new DbTypeNotFoundException("The given dbType " + dbType + " was not found.\n" + dbConfigDto);
+        }
+        dbConfigDto.setType(dbTypeByte);
+        dbConfigDto = databaseMetadataService.updateDatabaseConfig(dbConfigDto);
+        return new ResponseEntity<>(dbConfigDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/db/{dbType}",method = RequestMethod.DELETE)
+    public ResponseEntity deleteDatabaseConfig(
+            @PathVariable(value = "dbType") String dbType) {
+        databaseMetadataService.deleteDatabaseConfig(DbTypeEnum.getEnumByDesc(dbType));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

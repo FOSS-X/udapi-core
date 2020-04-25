@@ -22,7 +22,6 @@ public class DbConfigDto {
     }
 
     public static class Builder {
-
         private String dbName;
         private String userName;
         private String password;

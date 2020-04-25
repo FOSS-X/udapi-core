@@ -123,6 +123,10 @@ public class UdapiDatabaseMetadataEntity {
         return ip;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UdapiDatabaseMetadataEntity{");

@@ -4,7 +4,6 @@ import com.gupta.udapi.dtos.DbConfigDto;
 import com.gupta.udapi.entities.UdapiDatabaseMetadataEntity;
 import com.gupta.udapi.enums.DbTypeEnum;
 import com.gupta.udapi.mapper.UdapiDatabaseMetadataMapper;
-import com.gupta.udapi.mapper.UdapiUserMapper;
 import com.gupta.udapi.repositories.UdapiDatabaseMetadataRepository;
 import com.gupta.udapi.services.UdapiDatabaseMetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,23 @@ public class UdapiDatabaseMetadataServiceImpl implements UdapiDatabaseMetadataSe
 
     @Override
     public UdapiDatabaseMetadataEntity getDatabaseConfig(DbTypeEnum typeEnum) {
-        UdapiDatabaseMetadataEntity metadataEntity = databaseMetadataRepository.getDatabaseConfig(typeEnum);
-        return metadataEntity;
+        return databaseMetadataRepository.getDatabaseConfig(typeEnum);
+    }
+
+    @Override
+    public DbConfigDto updateDatabaseConfig(DbConfigDto dbConfigDto) {
+        UdapiDatabaseMetadataEntity databaseMetadataEntity = UdapiDatabaseMetadataMapper.getEntityFromDto(dbConfigDto);
+        databaseMetadataEntity = databaseMetadataRepository.updateDatabaseConfig(databaseMetadataEntity);
+        return UdapiDatabaseMetadataMapper.getDtoFromEntity(databaseMetadataEntity);
+    }
+
+    @Override
+    public void deleteDatabaseConfig(DbTypeEnum dbTypeEnum) {
+        databaseMetadataRepository.deleteDatabaseConfig(dbTypeEnum);
     }
 
     @Override
     public List<UdapiDatabaseMetadataEntity> getAllDatabaseConfig() {
-        List<UdapiDatabaseMetadataEntity> metadataEntities = databaseMetadataRepository.getAllDatabaseConfig();
-        return metadataEntities;
+        return databaseMetadataRepository.getAllDatabaseConfig();
     }
 }

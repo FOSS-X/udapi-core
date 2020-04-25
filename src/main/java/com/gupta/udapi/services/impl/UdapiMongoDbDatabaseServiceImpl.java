@@ -34,7 +34,6 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
 
     @Override
     public void testConnection(DbConfigDto dbConfigDto) {
-        //MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
 
         MongoClient mongoClient = null;
         try {
@@ -53,14 +52,26 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
         }
     }
 
-    @Override
-    public String addEntitySet(String esName) {
+    public String getEntity() {
+        return null;
+    }
+
+    public String deleteEntity() {
+        return null;
+    }
+
+    public String updateEntity() {
         return null;
     }
 
     @Override
-    public void addEntity() {
+    public String addEntity(String entityName, String entityId) {
+        return null;
+    }
 
+    @Override
+    public String addEntitySet(String esName) {
+        return null;
     }
 
     @Override

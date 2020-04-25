@@ -8,12 +8,11 @@ import java.sql.SQLException;
 /**
  * @author amitkumargupta
  */
-@Service
 public interface UdapiDatabaseService {
 
     void testConnection (DbConfigDto dbConfigDto) throws SQLException;
     String addEntitySet(String esName);
-    void addEntity();
+    String addEntity(String entityName, String entityId);
     String getEntitySet(String esName);
     String getAllEntitySets();
 }
