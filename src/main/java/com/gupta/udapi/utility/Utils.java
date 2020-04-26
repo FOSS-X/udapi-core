@@ -13,7 +13,13 @@ import org.springframework.stereotype.Service;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author amitkumargupta
@@ -63,5 +69,25 @@ public class Utils {
             }
         }
         return jsonArray;
+    }
+
+    public static List<String> getColumnNamesFromEntitySet(String entitySetName, Connection conn) throws Exception {
+
+        ResultSet resultSet = conn.createStatement().executeQuery("DESC " + entitySetName);
+        List<String> columnSet = new ArrayList<>();
+        while (resultSet.next()) {
+            columnSet.add(resultSet.getString(1));
+        }
+        return columnSet;
+    }
+
+    public static String getPrimaryKeyFromEntitySet(String entitySetName, Connection conn) throws SQLException {
+
+        ResultSet rs = conn.getMetaData().getPrimaryKeys(null, null, entitySetName);
+        if (!rs.next())
+            return null;
+
+        // Gets the first primary key if more than one is present.
+        return rs.getString("COLUMN_NAME");
     }
 }

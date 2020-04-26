@@ -15,6 +15,7 @@ import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,19 +51,24 @@ public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
     }
 
     @Override
-    public String addEntitySet(String esName) {
+    public String getEntity(String entitySetName, String entityId) {
         return null;
     }
 
     @Override
-    public String addEntity(String entityName, String entityId) {
+    public String addEntity(String entitySetName, String entityId, JSONObject jsonEntity) {
         return null;
     }
 
-//    @Override
-//    public void addEntity() {
-//
-//    }
+    @Override
+    public String updateEntity(String entityName, String entityId, JSONObject jsonEntity) {
+        return null;
+    }
+
+    @Override
+    public String addEntitySet(String esName) {
+        return null;
+    }
 
     @Override
     public String getEntitySet(String esName) {

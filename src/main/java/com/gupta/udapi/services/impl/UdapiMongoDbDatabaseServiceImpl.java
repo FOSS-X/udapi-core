@@ -52,6 +52,21 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
         }
     }
 
+    @Override
+    public String getEntity(String entitySetName, String entityId) {
+        return null;
+    }
+
+    @Override
+    public String addEntity(String entitySetName, String entityId, JSONObject jsonEntity) {
+        return null;
+    }
+
+    @Override
+    public String updateEntity(String entityName, String entityId, JSONObject jsonEntity) {
+        return null;
+    }
+
     public String getEntity() {
         return null;
     }
@@ -61,11 +76,6 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
     }
 
     public String updateEntity() {
-        return null;
-    }
-
-    @Override
-    public String addEntity(String entityName, String entityId) {
         return null;
     }
 
@@ -80,7 +90,7 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
         UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MONGODB);
 
         if (databaseMetadataEntity == null) {
-            throw new DatabaseException("The mysql database configuration might not exist. Create one.");
+            throw new DatabaseException("The mongodb database configuration might not exist. Create one.");
         }
 
         MongoClient mongoClient = null;
@@ -123,7 +133,7 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
         UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MONGODB);
 
         if (databaseMetadataEntity == null) {
-            throw new DatabaseException("The mysql database configuration might not exist. Create one.");
+            throw new DatabaseException("The mongodb database configuration might not exist. Create one.");
         }
 
         MongoClient mongoClient = null;
