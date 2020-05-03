@@ -11,6 +11,7 @@ import com.gupta.udapi.services.UdapiDatabaseService;
 import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.util.JSON;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,12 +55,86 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
 
     @Override
     public String getEntity(String entitySetName, String entityId) {
+        UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MONGODB);
+
+        if (databaseMetadataEntity == null) {
+            throw new DatabaseException("The mongodb database configuration might not exist. Create one.");
+        }
+
+        MongoClient mongoClient = null;
+        DB database = null;
+        try {
+            mongoClient = new MongoClient(new MongoClientURI(
+                    "mongodb://" +
+                            databaseMetadataEntity.getIp() +
+                            ":" +
+                            databaseMetadataEntity.getPort()));
+
+            database = mongoClient.getDB(databaseMetadataEntity.getDbName());
+            if (database == null)
+                throw new Exception();
+
+        } catch (Exception e) {
+            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
+                    databaseMetadataEntity);
+        }
+
+        DBCollection collection = database.getCollection(entitySetName);
+        BasicDBObject query = new BasicDBObject("_id", entityId);
+        DBCursor cursor = collection.find(query);
+
+        JSONArray response = null;
+        try {
+            response = new JSONArray();
+            while (cursor.hasNext()) {
+                response.put(cursor.next());
+//                response.put("data", cursor.next());
+                return response.toString();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+
+        // No data, null returned
         return null;
     }
 
     @Override
     public String addEntity(String entitySetName, String entityId, JSONObject jsonEntity) {
-        return null;
+        UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MONGODB);
+
+        if (databaseMetadataEntity == null) {
+            throw new DatabaseException("The mongodb database configuration might not exist. Create one.");
+        }
+
+        MongoClient mongoClient = null;
+        DB database = null;
+        try {
+            mongoClient = new MongoClient(new MongoClientURI(
+                    "mongodb://" +
+                            databaseMetadataEntity.getIp() +
+                            ":" +
+                            databaseMetadataEntity.getPort()));
+
+            database = mongoClient.getDB(databaseMetadataEntity.getDbName());
+            if (database == null)
+                throw new Exception();
+
+        } catch (Exception e) {
+            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
+                    databaseMetadataEntity);
+        }
+        DBCollection collection = database.getCollection(entitySetName);
+        try {
+            jsonEntity.put("_id", entityId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        WriteResult writeResult = collection.insert((DBObject) JSON.parse(jsonEntity.toString()));
+        return writeResult.toString();
     }
 
     @Override
@@ -67,16 +142,35 @@ public class UdapiMongoDbDatabaseServiceImpl implements UdapiDatabaseService {
         return null;
     }
 
-    public String getEntity() {
-        return null;
-    }
+    @Override
+    public String deleteEntity(String entitySetName, String entityId) {
+        UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MONGODB);
 
-    public String deleteEntity() {
-        return null;
-    }
+        if (databaseMetadataEntity == null) {
+            throw new DatabaseException("The mongodb database configuration might not exist. Create one.");
+        }
 
-    public String updateEntity() {
-        return null;
+        MongoClient mongoClient = null;
+        DB database = null;
+        try {
+            mongoClient = new MongoClient(new MongoClientURI(
+                    "mongodb://" +
+                            databaseMetadataEntity.getIp() +
+                            ":" +
+                            databaseMetadataEntity.getPort()));
+
+            database = mongoClient.getDB(databaseMetadataEntity.getDbName());
+            if (database == null)
+                throw new Exception();
+
+        } catch (Exception e) {
+            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
+                    databaseMetadataEntity);
+        }
+
+        DBCollection collection = database.getCollection(entitySetName);
+        BasicDBObject query = new BasicDBObject("_id", entityId);
+        return collection.remove(query).toString();
     }
 
     @Override

@@ -33,7 +33,6 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
 
     @Override
     public void testConnection(DbConfigDto dbConfigDto) throws SQLException {
-
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(
@@ -42,7 +41,6 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
                             dbConfigDto.getPort() +
                             "/" +
                             dbConfigDto.getDbName(),
-
                     dbConfigDto.getUserName(),
                     dbConfigDto.getPassword());
         } catch (SQLException e) {
@@ -59,11 +57,9 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
     @Override
     public String getEntity(String entitySetName, String entityId) {
         UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MYSQL);
-
         if (databaseMetadataEntity == null) {
             throw new DatabaseException("The mysql database configuration might not exist. Create one.");
         }
-
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(
@@ -72,10 +68,8 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
                             databaseMetadataEntity.getPort() +
                             "/" +
                             databaseMetadataEntity.getDbName(),
-
                     databaseMetadataEntity.getUserName(),
                     databaseMetadataEntity.getPassword());
-
         } catch (SQLException e) {
             throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
                     databaseMetadataEntity);
@@ -150,7 +144,7 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
                 result = Integer.toString(res);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new DatabaseException("The entity set probably does not exist " + entitySetName);
+                throw new DatabaseException(e.getMessage());
             }
 
             if (conn != null) {
@@ -170,6 +164,7 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
         }
         catch (Exception e) {
             e.printStackTrace();
+            throw new DatabaseException(e.getMessage());
         }
 
         return result;
@@ -178,6 +173,43 @@ public class UdapiMysqlDatabaseServiceImpl implements UdapiDatabaseService {
     @Override
     public String updateEntity(String entityName, String entityId, JSONObject jsonEntity) {
         return null;
+    }
+
+    @Override
+    public String deleteEntity(String entitySetName, String entityId) {
+
+        UdapiDatabaseMetadataEntity databaseMetadataEntity = metadataRepository.getDatabaseConfig(DbTypeEnum.MYSQL);
+
+        if (databaseMetadataEntity == null) {
+            throw new DatabaseException("The mysql database configuration might not exist. Create one.");
+        }
+
+        Connection conn = null;
+        String result = "";
+        try {
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://" + databaseMetadataEntity.getIp() +
+                            ":" +
+                            databaseMetadataEntity.getPort() +
+                            "/" +
+                            databaseMetadataEntity.getDbName(),
+
+                    databaseMetadataEntity.getUserName(),
+                    databaseMetadataEntity.getPassword());
+
+
+            Statement stmt = conn.createStatement();
+            String deleteQuery = "DELETE FROM " + entitySetName + " WHERE id =\""
+                    + entityId + "\"";
+            result = Integer.toString(((Statement) stmt).executeUpdate(deleteQuery));
+
+        } catch (SQLException e) {
+            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
+                    databaseMetadataEntity);
+        }
+
+
+        return result;
     }
 
     @Override

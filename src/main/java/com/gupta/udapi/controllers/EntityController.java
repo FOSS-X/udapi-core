@@ -69,8 +69,13 @@ public class EntityController {
     @RequestMapping(value = "/{entitySetName}/{entityId}",method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteEntity(
             final @PathVariable String entitySetName,
-            final @PathVariable String entityId
+            final @PathVariable String entityId,
+            @RequestAttribute(name = "dbType") String dbType
     ) {
-        return new ResponseEntity<>(entitySetName + "/"  + entityId, HttpStatus.OK);
+        Byte dbTypeByte = DbTypeEnum.getEnumByteFromString(dbType);
+        UdapiDatabaseService databaseService = DatabaseServiceFactory.getDatabaseService(
+                ApplicationContextFactory.getApplicationContext(), dbTypeByte);
+        String jsonResult = databaseService.deleteEntity(entitySetName, entityId);
+        return Utils.buildJsonResponseEntityFromString(jsonResult);
     }
 }

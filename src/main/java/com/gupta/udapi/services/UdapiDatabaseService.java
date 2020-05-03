@@ -15,6 +15,7 @@ public interface UdapiDatabaseService {
     String getEntity(String entitySetName, String entityId);
     String addEntity(String entitySetName, String entityId, JSONObject jsonEntity);
     String updateEntity(String entityName, String entityId, JSONObject jsonEntity);
+    String deleteEntity(String entitySetName, String entityId);
     String getEntitySet(String esName);
     String getAllEntitySets();
 

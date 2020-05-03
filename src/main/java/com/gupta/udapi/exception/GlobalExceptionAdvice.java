@@ -29,5 +29,14 @@ public class GlobalExceptionAdvice {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(value = DatabaseException.class)
+    public ResponseEntity<ErrorDetailJson> databaseException(Exception e) {
+
+        strategyLogger.fatal("Internal server error.");
+        strategyLogger.fatal(utils.getStackTraceInStringFmt(e));
+        return  new ResponseEntity<ErrorDetailJson>(new ErrorDetailJson("UD_100-01",e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     //TODO: Add all other exceptions
 }

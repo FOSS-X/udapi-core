@@ -66,6 +66,11 @@ public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
     }
 
     @Override
+    public String deleteEntity(String entitySetName, String entityId) {
+        return null;
+    }
+
+    @Override
     public String addEntitySet(String esName) {
         return null;
     }
