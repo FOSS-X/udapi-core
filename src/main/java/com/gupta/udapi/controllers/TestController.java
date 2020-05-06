@@ -1,5 +1,9 @@
 package com.gupta.udapi.controllers;
 
+import com.basho.riak.client.IRiakClient;
+import com.basho.riak.client.RiakException;
+import com.basho.riak.client.RiakFactory;
+import com.basho.riak.client.bucket.Bucket;
 import com.google.gson.JsonObject;
 import com.gupta.udapi.dtos.DbConfigDto;
 import com.gupta.udapi.services.factories.ApplicationContextFactory;
@@ -24,12 +28,6 @@ public class TestController {
     public ResponseEntity<String> test(
             @RequestBody String dbConfigDto
     ) {
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(dbConfigDto);
-        }catch (JSONException err){
-            err.printStackTrace();
-        }
         return new ResponseEntity<String>("Res", HttpStatus.OK);
     }
 }

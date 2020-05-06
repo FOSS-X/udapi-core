@@ -1,8 +1,5 @@
 package com.gupta.udapi.services.impl;
 
-import com.cloudant.client.api.ClientBuilder;
-import com.cloudant.client.api.CloudantClient;
-import com.cloudant.client.api.Database;
 import com.gupta.udapi.constants.UdapiDatabaseCodes;
 import com.gupta.udapi.dtos.DbConfigDto;
 import com.gupta.udapi.entities.UdapiDatabaseMetadataEntity;
@@ -13,15 +10,10 @@ import com.gupta.udapi.repositories.UdapiDatabaseMetadataRepository;
 import com.gupta.udapi.services.UdapiDatabaseService;
 import com.gupta.udapi.services.factories.DatabaseServiceFactory;
 import com.mongodb.*;
-import com.mongodb.client.MongoDatabase;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Set;
 
 @Service
 public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
@@ -36,18 +28,18 @@ public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
     @Override
     public void testConnection(DbConfigDto dbConfigDto) {
 
-        CloudantClient client;
-
-        try {
-            client = ClientBuilder.url(new URL("http://" + dbConfigDto.getIp()))
-                 .username(dbConfigDto.getUserName())
-                 .password(dbConfigDto.getPassword())
-                 .build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
-                    dbConfigDto);
-        }
+//        CloudantClient client;
+//
+//        try {
+//            client = ClientBuilder.url(new URL("http://" + dbConfigDto.getIp()))
+//                 .username(dbConfigDto.getUserName())
+//                 .password(dbConfigDto.getPassword())
+//                 .build();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
+//                    dbConfigDto);
+//        }
     }
 
     @Override
@@ -125,19 +117,6 @@ public class UdapiCouchDbDatabaseServiceImpl implements UdapiDatabaseService {
 
         if (databaseMetadataEntity == null) {
             throw new DatabaseException("The mysql database configuration might not exist. Create one.");
-        }
-
-        CloudantClient client;
-
-        try {
-            client = ClientBuilder.url(new URL("http://" + databaseMetadataEntity.getIp()))
-                    .username(databaseMetadataEntity.getUserName())
-                    .password(databaseMetadataEntity.getPassword())
-                    .build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CannotConnectToDatabaseException("Could not test connection to the database with config: \n" +
-                    databaseMetadataEntity);
         }
 
 //        Set<String> esNames = database.getCollectionNames();
