@@ -25,7 +25,7 @@ public interface UdapiDatabaseMetadataJpa<T extends UdapiDatabaseMetadataEntity,
     @Query("select u from UdapiDatabaseMetadataEntity u")
     List<T> getAllDatabaseMetadataFromByte();
 
-    @Query(value = "select CASE WHEN COUNT(e) > 0 THEN 'true' ELSE 'false' END from UdapiDatabaseMetadataEntity e where e.dbName = :dbName and e.type = :dbType")
+    @Query(value = "select CASE WHEN COUNT(e) > 0 THEN 'true' ELSE 'false' END from UdapiDatabaseMetadataEntity e where e.dbName = :dbName or e.type = :dbType")
     Boolean checkIfCommunityExistsByName(String dbName, Byte dbType);
 
     @Transactional
